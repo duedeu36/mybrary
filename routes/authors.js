@@ -22,8 +22,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// New author route (for displaying the form)
-router.get("/new", (req, res) => {
+// New author route
+router.get("/new", async (req, res) => {
   res.render("authors/new", { author: new Author() }); // the document which has to be rendered (displayed on the screen)
 });
 
