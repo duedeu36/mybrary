@@ -7,9 +7,10 @@ const multer = require("multer");
 const path = require("path"); // path + multer for upload neccessary (like coverImageBasePath in model)
 const uploadPath = path.join("public", Book.coverImageBasePath);
 const Author = require("../models/author");
-const imageMimeTypes = ["images/jpeg", "images/png", "images/gif"]; // which files we accept
+const imageMimeTypes = ["images/jpeg", "images/png", "images/gif"]; // which files we only accept
 const upload = multer({
   dest: uploadPath,
+  limits: { fileSize: 250000 },
   fileFilter: (req, file, callback) => {
     callback(null, imageMimeTypes);
   }
@@ -22,9 +23,9 @@ router.get("/", async (req, res) => {
     searchOptions.title = new RegExp(req.query.title, "i");
   }
   try {
-    const books = await Book.find(searchOptions);
+    const books1 = await Book.find(searchOptions);
     res.render("books/index", {
-      books: books,
+      books1: books1,
       searchOptions: req.query
     });
   } catch (e) {
@@ -39,13 +40,15 @@ router.get("/new", async (req, res) => {
 
 // Create book route
 router.post("/", upload.single("cover"), async (req, res) => {
-  const fileName = req.file != null ? req.file.filename : null;
+  //   const fileName =
+  //     req.file != null ? req.file.filename : null;
+  const limits = req.file <= upload.limits ? req.file.filename : null;
   const book = new Book({
     title: req.body.title, // name comes from the input name="title" in _form_fields.ejs
     author: req.body.author,
     publishDate: new Date(req.body.publishDate),
     pageCount: req.body.pageCount,
-    coverImageName: fileName,
+    coverImageName: limits,
     description: req.body.description
   });
   try {
