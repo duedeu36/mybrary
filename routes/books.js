@@ -11,7 +11,9 @@ const Author = require("../models/author");
 const imageMimeTypes = ["images/jpeg", "images/png", "images/gif"]; // which files we only accept
 const upload = multer({
   dest: uploadPath,
-  limits: { fileSize: 1000000 },
+  limits: {
+    fileSize: 1000000
+  },
   fileFilter: (req, file, callback) => {
     callback(null, imageMimeTypes);
   }
@@ -21,12 +23,25 @@ const upload = multer({
 // @desc    Get all books route
 // @access  Public
 router.get("/", async (req, res) => {
-  let searchOptions = {};
-  if (req.query.title != null && req.query.title !== "") {
-    searchOptions.title = new RegExp(req.query.title, "i");
+  let query = Book.find();
+  if (req.query.title !== null && req.query.title !== "") {
+    query = query.regex("title", new RegExp(req.query.title, "i"));
+  }
+  if (
+    req.query.publishedBefore1 !== null &&
+    req.query.publishedBefore1 !== ""
+  ) {
+    // "publishDate" comes from the db
+    // "lte" is from mongo and means less then (or) equal to
+    query = query.lte("publishDate", req.query.publishedBefore1);
+  }
+  if (req.query.publishedAfter2 !== null && req.query.publishedAfter2 !== "") {
+    // "publishDate" comes from the db
+    // "lte" is from mongo and means greater then (or) equal to
+    query = query.gte("publishDate", req.query.publishedAfter2);
   }
   try {
-    const books1 = await Book.find(searchOptions);
+    const books1 = await query.exec();
     res.render("books/index", {
       books1: books1,
       searchOptions: req.query
