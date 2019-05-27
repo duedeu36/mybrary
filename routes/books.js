@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const Book = require("../models/book");
 const Author = require("../models/author");
-const imageMimeTypes = ["images/jpeg", "images/png", "images/gif"]; // which files we only accept
+const imageMimeTypes = ["image/jpeg", "image/png", "image/gif"]; // which files we only accept
 
 // @route   GET books/
 // @desc    Get all books route
