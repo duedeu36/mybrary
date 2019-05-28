@@ -57,6 +57,7 @@ router.post("/", async (req, res) => {
     // res.redirect(`books/${newBook.id}`)
     res.redirect(`books`);
   } catch (e) {
+    console.log(e);
     renderNewPage(res, book, true);
   }
 });

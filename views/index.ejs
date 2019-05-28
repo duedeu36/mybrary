@@ -1,9 +1,10 @@
-<h2> Recently Added<h2>
+<h2> Recently Added</h2>
 
 <div>
    <% books1.forEach(book => { // "books1" was "book" earlier, same in routes/books %> 
- <div style="display: inline-block"> 
-  <div>  <%= book.title %>  </div>
-   <img height="150" width="100" src="<%= book.coverImagePath %>" /> 
- </div>
-   <% })%> </div>
+      <div style="display: inline-block"> 
+      <div>  <%= book.title %>  </div>
+         <img height="150" width="100" src="<%= book.coverImagePath %>" /> 
+      </div>
+   <% })%> 
+</div>
